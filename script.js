@@ -1,110 +1,100 @@
-/* ─────────────────────────────────────────
-   EcoCloset · script.js
-   1. Menu hambúrguer (mobile)
-   2. Contadores animados
-   3. Scroll reveal (animação ao entrar na tela)
-   4. Highlight do menu ativo
-───────────────────────────────────────── */
+if (!window.matchMedia("(min-width: 769px)").matches) return;
 
 
-/* ══════════════════════════════════════
-   1. MENU HAMBÚRGUER (mobile)
-══════════════════════════════════════ */
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobile-menu');
+//  1. NAVBAR DINÂMICA
 
-hamburger.addEventListener('click', () => {
-  const isOpen = mobileMenu.classList.toggle('open');
-  hamburger.innerHTML = isOpen ? '✕' : '☰';
-  hamburger.setAttribute('aria-expanded', isOpen);
+const nav = document.querySelector("nav");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 50) {
+    nav.style.background = "rgba(244,240,232,0.95)";
+    nav.style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
+  } else {
+    nav.style.background = "rgba(244,240,232,0.85)";
+    nav.style.boxShadow = "none";
+  }
 });
 
-// Fecha o menu ao clicar em um link
-mobileMenu.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    hamburger.innerHTML = '☰';
+//  2. SCROLL SUAVE
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const target = document.querySelector(link.getAttribute("href"));
+
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
 });
 
+//  3. HOVER 3D NOS CARDS
 
-/* ══════════════════════════════════════
-   2. CONTADORES ANIMADOS
-   Anima os números da seção .stats
-   quando ela entra na tela
-══════════════════════════════════════ */
-function animateCounter(el, target, suffix, duration = 1800) {
-  let start = 0;
-  const isFloat = target % 1 !== 0;
-  const step = (timestamp) => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    // Easing: ease-out
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = eased * target;
-    el.textContent = (isFloat ? current.toFixed(1) : Math.floor(current))
-      .toLocaleString('pt-BR') + suffix;
-    if (progress < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
+document.querySelectorAll(".clothes-card").forEach(card => {
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-const statsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Água: 2700
-      animateCounter(document.getElementById('count-water'), 2700, 'L');
-      // CO2: texto, não número — apenas revela
-      document.getElementById('count-co2').textContent = '↓ CO₂';
-      // Custo: R$ 0
-      animateCounter(document.getElementById('count-cost'), 0, '');
-      statsObserver.disconnect();
-    }
+    card.style.transform = `
+      rotateX(${-(y - rect.height/2) / 20}deg)
+      rotateY(${(x - rect.width/2) / 20}deg)
+      scale(1.03)
+    `;
   });
-}, { threshold: 0.4 });
 
-const statsSection = document.querySelector('.stats');
-if (statsSection) statsObserver.observe(statsSection);
-
-
-/* ══════════════════════════════════════
-   3. SCROLL REVEAL
-   Elementos com [data-reveal] aparecem
-   com fade + slide ao entrar na tela
-══════════════════════════════════════ */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      revealObserver.unobserve(entry.target);
-    }
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0) rotateY(0) scale(1)";
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('[data-reveal]').forEach(el => {
-  revealObserver.observe(el);
 });
 
+//  4. FEEDBACK NOS BOTÕES
 
-/* ══════════════════════════════════════
-   4. HIGHLIGHT DO MENU ATIVO
-   Marca o link do menu conforme a seção
-   visível na tela durante o scroll
-══════════════════════════════════════ */
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
+document.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.style.transform = "scale(0.95)";
+    setTimeout(() => {
+      btn.style.transform = "";
+    }, 150);
+  });
+});
 
-const menuObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + entry.target.id) {
-          link.classList.add('active');
-        }
-      });
+// 5. ANIMAÇÃO AO APARECER
+const revealElements = document.querySelectorAll("[data-reveal]");
+
+const revealOnScroll = () => {
+  revealElements.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+
+    if (top < window.innerHeight - 100) {
+      el.classList.add("revealed");
     }
   });
-}, { threshold: 0.4 });
+};
 
-sections.forEach(section => menuObserver.observe(section));
+window.addEventListener("scroll", revealOnScroll);
+revealOnScroll();
+
+ document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX / window.innerWidth) - 0.5;
+  const y = (e.clientY / window.innerHeight) - 0.5;
+
+  document.querySelectorAll(".floating-badge").forEach(el => {
+    el.style.transform = `
+      translate(${x * 30}px, ${y * 30}px)
+    `;
+  });
+});
+document.addEventListener("mousemove", (e) => {
+  requestAnimationFrame(() => {
+    const x = (e.clientX / window.innerWidth) - 0.5;
+    const y = (e.clientY / window.innerHeight) - 0.5;
+
+    document.querySelectorAll(".floating-badge").forEach(el => {
+      el.style.transform = `
+        translate(${x * 20}px, ${y * 20}px)
+      `;
+    });
+  });
+});
