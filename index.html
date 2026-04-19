@@ -18,8 +18,87 @@
     <li><a href="#impact">Impacto</a></li>
     <li><a href="#how">Como funciona</a></li>
   </ul>
-  <button class="nav-cta">Começar agora</button>
+  <!-- Estado: deslogado -->
+  <div class="nav-auth" id="nav-auth">
+    <button class="btn-ghost-sm" id="btn-abrir-login">Entrar</button>
+    <button class="nav-cta desktop-only" id="btn-abrir-cadastro">Criar conta</button>
+  </div>
+  <!-- Estado: logado -->
+  <div class="nav-user hidden" id="nav-user">
+    <span class="nav-user-nome" id="nav-user-nome"></span>
+    <button class="btn-logout" id="btn-logout">Sair</button>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">☰</button>
 </nav>
+
+<!-- MENU MOBILE -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about">Sobre</a>
+  <a href="#benefits">Benefícios</a>
+  <a href="#impact">Impacto</a>
+  <a href="#how">Como funciona</a>
+  <button class="btn-primary" id="btn-mobile-cadastro">Criar conta</button>
+</div>
+
+<!-- ══════════════════════════════════
+     MODAL DE AUTENTICAÇÃO
+══════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal" id="modal">
+
+    <!-- Cabeçalho do modal -->
+    <div class="modal-header">
+      <div class="modal-logo">🌿 EcoCloset</div>
+      <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+    </div>
+
+    <!-- Abas -->
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" data-tab="login">Entrar</button>
+      <button class="modal-tab" id="tab-cadastro" data-tab="cadastro">Criar conta</button>
+    </div>
+
+    <!-- Mensagem de feedback -->
+    <div class="modal-msg hidden" id="modal-msg"></div>
+
+    <!-- ─── FORMULÁRIO LOGIN ─── -->
+    <div class="modal-form" id="form-login">
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="login-senha" placeholder="Sua senha" autocomplete="current-password">
+      </div>
+      <button class="btn-form" id="btn-login">
+        <span id="btn-login-texto">Entrar</span>
+        <span id="btn-login-loader" class="loader hidden"></span>
+      </button>
+    </div>
+
+    <!-- ─── FORMULÁRIO CADASTRO ─── -->
+    <div class="modal-form hidden" id="form-cadastro">
+      <div class="form-group">
+        <label>Nome completo</label>
+        <input type="text" id="cadastro-nome" placeholder="Seu nome" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="cadastro-email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Senha <small>(mínimo 6 caracteres)</small></label>
+        <input type="password" id="cadastro-senha" placeholder="Crie uma senha" autocomplete="new-password">
+      </div>
+      <button class="btn-form" id="btn-cadastro">
+        <span id="btn-cadastro-texto">Criar conta grátis</span>
+        <span id="btn-cadastro-loader" class="loader hidden"></span>
+      </button>
+    </div>
+
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -28,11 +107,10 @@
     <h1>Troque roupas,<br><em>salve o planeta</em></h1>
     <p>Uma plataforma de economia circular para universidades e comunidades locais. Reduza desperdício, economize dinheiro e transforme seu guarda-roupa.</p>
     <div class="hero-actions">
-      <button class="btn-primary">Começar agora</button>
-      <button class="btn-ghost">Ver como funciona</button>
+      <button class="btn-primary" id="btn-hero-comecar">Começar agora</button>
+      <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
     </div>
   </div>
-
   <div class="hero-visual">
     <div style="position:relative; display:inline-block;">
       <div class="clothes-card">
@@ -41,187 +119,90 @@
         <div class="card-title">Vestido Floral Vintage</div>
         <div class="card-sub">Ótimo estado · 0 km de distância</div>
         <div class="card-footer">
-          <div class="card-user">
-            <div class="avatar">A</div>
-            Ana Lima
-          </div>
+          <div class="card-user"><div class="avatar">A</div>Ana Lima</div>
           <button class="card-btn">Trocar →</button>
         </div>
       </div>
-      <div class="floating-badge fb-1">
-        <span class="fb-dot"></span>
-        2.700L de água economizados
-      </div>
-      <div class="floating-badge fb-2">
-        🏅 Curador Consciente
-      </div>
+      <div class="floating-badge fb-1"><span class="fb-dot"></span>2.700L de água economizados</div>
+      <div class="floating-badge fb-2">🏅 Curador Consciente</div>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
 <section class="stats">
-  <div>
-    <div class="stat-num">2.700L</div>
-    <div class="stat-label">Água por peça reutilizada</div>
-  </div>
-  <div>
-    <div class="stat-num">↓ CO₂</div>
-    <div class="stat-label">Redução na pegada de carbono</div>
-  </div>
-  <div>
-    <div class="stat-num">R$ 0</div>
-    <div class="stat-label">Custo para trocar</div>
-  </div>
+  <div data-reveal><div class="stat-num" id="count-water">2.700L</div><div class="stat-label">Água por peça reutilizada</div></div>
+  <div data-reveal><div class="stat-num" id="count-co2">↓ CO₂</div><div class="stat-label">Redução na pegada de carbono</div></div>
+  <div data-reveal><div class="stat-num" id="count-cost">R$ 0</div><div class="stat-label">Custo para trocar</div></div>
 </section>
 
 <!-- ABOUT -->
 <section class="about" id="about">
-  <span class="section-label">Sobre o App</span>
-  <h2 class="section-title">Um ecossistema digital para roupas que ainda têm história</h2>
-  <p class="section-body">O EcoCloset conecta pessoas que querem trocar, vender e reutilizar roupas de forma sustentável. Focado em comunidades universitárias e grupos locais, promovendo a economia circular na moda.</p>
+  <span class="section-label" data-reveal>Sobre o App</span>
+  <h2 class="section-title" data-reveal>Um ecossistema digital para roupas que ainda têm história</h2>
+  <p class="section-body" data-reveal>O EcoCloset conecta pessoas que querem trocar, vender e reutilizar roupas de forma sustentável. Focado em comunidades universitárias e grupos locais, promovendo a economia circular na moda.</p>
 </section>
 
 <!-- BENEFITS -->
 <section class="benefits" id="benefits">
   <div style="text-align:center;">
-    <span class="section-label">Por que usar</span>
-    <h2 class="section-title">Benefícios para você<br>e para o planeta</h2>
+    <span class="section-label" data-reveal>Por que usar</span>
+    <h2 class="section-title" data-reveal>Benefícios para você<br>e para o planeta</h2>
   </div>
   <div class="benefits-grid">
-    <div class="benefit-card">
-      <div class="benefit-icon">♻️</div>
-      <div class="benefit-title">Sustentável</div>
-      <div class="benefit-desc">Cada troca evita que uma roupa vá para o lixo. Estenda a vida útil dos seus itens e contribua para a moda circular.</div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">💸</div>
-      <div class="benefit-title">Econômico</div>
-      <div class="benefit-desc">Renove seu guarda-roupa sem gastar dinheiro. A troca direta elimina custos e conecta pessoas de forma simples.</div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">📱</div>
-      <div class="benefit-title">Fácil de usar</div>
-      <div class="benefit-desc">Interface intuitiva e rápida. Cadastre seus itens, encontre o que você quer e combine a troca em minutos.</div>
-    </div>
+    <div class="benefit-card" data-reveal><div class="benefit-icon">♻️</div><div class="benefit-title">Sustentável</div><div class="benefit-desc">Cada troca evita que uma roupa vá para o lixo. Estenda a vida útil dos seus itens e contribua para a moda circular.</div></div>
+    <div class="benefit-card" data-reveal><div class="benefit-icon">💸</div><div class="benefit-title">Econômico</div><div class="benefit-desc">Renove seu guarda-roupa sem gastar dinheiro. A troca direta elimina custos e conecta pessoas de forma simples.</div></div>
+    <div class="benefit-card" data-reveal><div class="benefit-icon">📱</div><div class="benefit-title">Fácil de usar</div><div class="benefit-desc">Interface intuitiva e rápida. Cadastre seus itens, encontre o que você quer e combine a troca em minutos.</div></div>
   </div>
 </section>
 
 <!-- IMPACT -->
 <section class="impact" id="impact">
   <div style="text-align:center;">
-    <span class="section-label">Impacto Ambiental</span>
-    <h2 class="section-title">Cada troca faz diferença</h2>
+    <span class="section-label" data-reveal>Impacto Ambiental</span>
+    <h2 class="section-title" data-reveal>Cada troca faz diferença</h2>
   </div>
   <div class="impact-grid">
-    <div class="impact-card">
-      <div class="impact-icon-wrap">💧</div>
-      <div>
-        <div class="impact-num">2.700L</div>
-        <div class="impact-label">de água economizados por peça — o equivalente a mais de 1 ano de banhos</div>
-      </div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-icon-wrap">🌍</div>
-      <div>
-        <div class="impact-num">↓ CO₂</div>
-        <div class="impact-label">Redução na emissão de carbono ao evitar produção e transporte de longa distância</div>
-      </div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-icon-wrap">🔄</div>
-      <div>
-        <div class="impact-num">Upcycling</div>
-        <div class="impact-label">Registro de reparos e customizações em peças antigas para ampliar sua vida útil</div>
-      </div>
-    </div>
-    <div class="impact-card">
-      <div class="impact-icon-wrap">🏫</div>
-      <div>
-        <div class="impact-num">Comunidade</div>
-        <div class="impact-label">Focado em grupos universitários e locais, fortalecendo a economia circular próxima de você</div>
-      </div>
-    </div>
+    <div class="impact-card" data-reveal><div class="impact-icon-wrap">💧</div><div><div class="impact-num">2.700L</div><div class="impact-label">de água economizados por peça — o equivalente a mais de 1 ano de banhos</div></div></div>
+    <div class="impact-card" data-reveal><div class="impact-icon-wrap">🌍</div><div><div class="impact-num">↓ CO₂</div><div class="impact-label">Redução na emissão de carbono ao evitar produção e transporte de longa distância</div></div></div>
+    <div class="impact-card" data-reveal><div class="impact-icon-wrap">🔄</div><div><div class="impact-num">Upcycling</div><div class="impact-label">Registro de reparos e customizações em peças antigas para ampliar sua vida útil</div></div></div>
+    <div class="impact-card" data-reveal><div class="impact-icon-wrap">🏫</div><div><div class="impact-num">Comunidade</div><div class="impact-label">Focado em grupos universitários e locais, fortalecendo a economia circular próxima de você</div></div></div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section class="how" id="how">
   <div style="text-align:center;">
-    <span class="section-label">Passo a passo</span>
-    <h2 class="section-title">Como funciona</h2>
+    <span class="section-label" data-reveal>Passo a passo</span>
+    <h2 class="section-title" data-reveal>Como funciona</h2>
   </div>
   <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <div class="step-title">Cadastre seus itens</div>
-        <div class="step-desc">Adicione fotos e descrição das roupas que você quer trocar ou vender. Rápido e simples.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <div class="step-title">Encontre o que quer</div>
-        <div class="step-desc">Navegue pelos itens disponíveis na sua comunidade e filtre por tamanho, estilo e distância.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <div class="step-title">Combine a troca</div>
-        <div class="step-desc">Entre em contato com o dono do item e combine a troca diretamente — sem intermediários.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-content">
-        <div class="step-title">Ganhe conquistas</div>
-        <div class="step-desc">Cada troca realizada conta pontos e desbloqueia selos de sustentabilidade no seu perfil.</div>
-      </div>
-    </div>
+    <div class="step" data-reveal><div class="step-num">1</div><div class="step-content"><div class="step-title">Cadastre seus itens</div><div class="step-desc">Adicione fotos e descrição das roupas que você quer trocar ou vender. Rápido e simples.</div></div></div>
+    <div class="step" data-reveal><div class="step-num">2</div><div class="step-content"><div class="step-title">Encontre o que quer</div><div class="step-desc">Navegue pelos itens disponíveis na sua comunidade e filtre por tamanho, estilo e distância.</div></div></div>
+    <div class="step" data-reveal><div class="step-num">3</div><div class="step-content"><div class="step-title">Combine a troca</div><div class="step-desc">Entre em contato com o dono do item e combine a troca diretamente — sem intermediários.</div></div></div>
+    <div class="step" data-reveal><div class="step-num">4</div><div class="step-content"><div class="step-title">Ganhe conquistas</div><div class="step-desc">Cada troca realizada conta pontos e desbloqueia selos de sustentabilidade no seu perfil.</div></div></div>
   </div>
 </section>
 
 <!-- GAMIFICATION -->
 <section class="gamification">
-  <span class="section-label">Gamificação</span>
-  <h2 class="section-title">Conquistas que inspiram</h2>
-  <p class="section-body" style="max-width:480px;margin:.6rem auto 0;color:var(--text-muted);font-size:.95rem;">Desbloqueie selos e badges ao adotar hábitos sustentáveis no seu consumo de moda.</p>
+  <span class="section-label" data-reveal>Gamificação</span>
+  <h2 class="section-title" data-reveal>Conquistas que inspiram</h2>
+  <p class="section-body" data-reveal style="max-width:480px;margin:.6rem auto 0;color:var(--text-muted);font-size:.95rem;">Desbloqueie selos e badges ao adotar hábitos sustentáveis no seu consumo de moda.</p>
   <div class="badges-grid">
-    <div class="badge-card">
-      <div class="badge-medal">🏅</div>
-      <div class="badge-name">Curador Consciente</div>
-      <div class="badge-cond">Concedido a usuários que realizam trocas de forma consistente e com boas avaliações.</div>
-      <span class="badge-pill">Usuário sustentável</span>
-    </div>
-    <div class="badge-card">
-      <div class="badge-medal">🔥</div>
-      <div class="badge-name">6 Meses Sem Compras</div>
-      <div class="badge-cond">Para quem passa 6 meses sem comprar roupas novas, vivendo só de trocas e reutilização.</div>
-      <span class="badge-pill">Meta de consumo</span>
-    </div>
-    <div class="badge-card">
-      <div class="badge-medal">🌱</div>
-      <div class="badge-name">Primeira Troca</div>
-      <div class="badge-cond">Desbloqueado ao realizar a primeira troca na plataforma. O primeiro passo para mudar o mundo!</div>
-      <span class="badge-pill">Iniciante</span>
-    </div>
-    <div class="badge-card">
-      <div class="badge-medal">🛠️</div>
-      <div class="badge-name">Mestre do Upcycling</div>
-      <div class="badge-cond">Para quem registra reparos e customizações em peças antigas, aumentando sua vida útil.</div>
-      <span class="badge-pill">Reparo & criatividade</span>
-    </div>
+    <div class="badge-card" data-reveal><div class="badge-medal">🏅</div><div class="badge-name">Curador Consciente</div><div class="badge-cond">Concedido a usuários que realizam trocas de forma consistente e com boas avaliações.</div><span class="badge-pill">Usuário sustentável</span></div>
+    <div class="badge-card" data-reveal><div class="badge-medal">🔥</div><div class="badge-name">6 Meses Sem Compras</div><div class="badge-cond">Para quem passa 6 meses sem comprar roupas novas, vivendo só de trocas e reutilização.</div><span class="badge-pill">Meta de consumo</span></div>
+    <div class="badge-card" data-reveal><div class="badge-medal">🌱</div><div class="badge-name">Primeira Troca</div><div class="badge-cond">Desbloqueado ao realizar a primeira troca na plataforma. O primeiro passo para mudar o mundo!</div><span class="badge-pill">Iniciante</span></div>
+    <div class="badge-card" data-reveal><div class="badge-medal">🛠️</div><div class="badge-name">Mestre do Upcycling</div><div class="badge-cond">Para quem registra reparos e customizações em peças antigas, aumentando sua vida útil.</div><span class="badge-pill">Reparo & criatividade</span></div>
   </div>
 </section>
 
 <!-- CTA -->
 <section class="cta-section">
-  <span class="section-label" style="color:var(--green-light);">Faça parte</span>
-  <h2 class="section-title">Pronto para transformar seu guarda-roupa?</h2>
-  <p>Junte-se à comunidade EcoCloset e comece a trocar hoje mesmo.</p>
-  <button class="btn-cta">Criar minha conta grátis</button>
+  <span class="section-label" style="color:var(--green-light);" data-reveal>Faça parte</span>
+  <h2 class="section-title" data-reveal>Pronto para transformar seu guarda-roupa?</h2>
+  <p data-reveal>Junte-se à comunidade EcoCloset e comece a trocar hoje mesmo.</p>
+  <button class="btn-cta" data-reveal id="btn-cta-final">Criar minha conta grátis</button>
 </section>
 
 <!-- FOOTER -->
@@ -229,5 +210,6 @@
   <strong>EcoCloset 🌿</strong> — Projeto Acadêmico · Todos os direitos reservados
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+{
+  "usuarios": [
+    {
+      "id": "1776630205822",
+      "nome": "Guilherme dos santos ribeiro",
+      "email": "guiribeiro2007a@gmail.com",
+      "senha": "$2b$10$yKpA5sA1TFr6GrPHI8Z6UuwxssCI3Od3psgnQMWbqx0AqkVKHIdCC",
+      "conquistas": [],
+      "criadoEm": "2026-04-19T20:23:25.823Z"
+    },
+    {
+      "id": "1776630268273",
+      "nome": "Guilherme dos santos ribeiro",
+      "email": "guilherme.ribeiro83@aluno.unip.br",
+      "senha": "$2b$10$P6KmbMTONXZ43nq0j0FjaOIu6ua3.Fw39j4XsgHYDIiRolD0Fp3xe",
+      "conquistas": [],
+      "criadoEm": "2026-04-19T20:24:28.273Z"
+    }
+  ]
+}
